@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Thumbnail Generator - NovanexusAI</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #ff0000; /* YouTube Red */
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #ff0000; /* YouTube Red */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #cc0000; /* Darker Red */
+        }
+
+        .thumbnail-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .thumbnail-container img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        footer a {
+            color: #ff0000; /* YouTube Red */
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            main {
+                padding: 10px;
+            }
+
+            input[type="text"] {
+                width: 100%;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>YouTube Thumbnail Generator</h1>
+        <p>By NovanexusAI</p>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Thumbnail Generator Section -->
+        <section>
+            <h2>Generate Thumbnail</h2>
+            <input type="text" id="video-url" placeholder="Enter YouTube Video URL">
+            <button onclick="generateThumbnail()">Generate Thumbnail</button>
+            <div class="thumbnail-container" id="thumbnail-container">
+                <!-- Thumbnail will be displayed here -->
+            </div>
+        </section>
+
+        <!-- Download Thumbnail Section -->
+        <section>
+            <h2>Download Thumbnail</h2>
+            <button onclick="downloadThumbnail()" id="download-button" disabled>Download Thumbnail</button>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Powered by <a href="https://www.novanexusai.com" target="_blank">NovanexusAI</a></p>
+    </footer>
+
+    <script>
+        // YouTube Thumbnail Generator Logic
+        function generateThumbnail() {
+            const videoUrl = document.getElementById('video-url').value;
+            const thumbnailContainer = document.getElementById('thumbnail-container');
+            const downloadButton = document.getElementById('download-button');
+
+            // Extract Video ID from URL
+            const videoId = extractVideoId(videoUrl);
+            if (!videoId) {
+                alert('Invalid YouTube URL. Please enter a valid URL.');
+                return;
+            }
+
+            // Generate Thumbnail URL
+            const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+
+            // Display Thumbnail
+            thumbnailContainer.innerHTML = `<img src="${thumbnailUrl}" alt="YouTube Thumbnail">`;
+            downloadButton.disabled = false;
+        }
+
+        // Extract Video ID from URL
+        function extractVideoId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        // Download Thumbnail
+        function downloadThumbnail() {
+            const thumbnailImg = document.querySelector('#thumbnail-container img');
+            if (!thumbnailImg) {
+                alert('No thumbnail available to download.');
+                return;
+            }
+
+            const imgUrl = thumbnailImg.src;
+            const link = document.createElement('a');
+            link.href = imgUrl;
+            link.download = 'youtube-thumbnail.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
